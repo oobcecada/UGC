@@ -9,6 +9,13 @@ app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    res.setHeader("Access-Control-Max-Age", "86400"); // Cache preflight requests for 24 hours
+    next();
+});
+
+// Middleware para log de requisições (útil para debugging no Railway)
+app.use((req, res, next) => {
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
     next();
 });
 
@@ -31,8 +38,13 @@ app.get("/proxy/item-details/:assetId", async (req, res) => {
         // Enviamos o valor de 'unitsAvailableForConsumption' para o cliente
         res.json({ unitsAvailableForConsumption });
     } catch (error) {
-        console.error("Erro ao buscar dados da API Roblox:", error);
-        res.status(500).json({ error: "Erro ao buscar dados da API Roblox" });
+        console.error("Erro ao buscar dados da API Roblox:", error.response?.data || error.message);
+
+        // Retorna uma mensagem de erro detalhada para o cliente
+        res.status(500).json({
+            error: "Erro ao buscar dados da API Roblox",
+            details: error.response?.data || error.message,
+        });
     }
 });
 
