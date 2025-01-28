@@ -28,13 +28,8 @@ app.get("/proxy/item-details/:assetId", async (req, res) => {
     try {
         const response = await axios.get(url);
 
-        const unitsAvailableForConsumption = response.data.unitsAvailableForConsumption || 0;
-        const totalQuantity = response.data.totalQuantity || 0;
-
-        // Formata a resposta como "unidades disponíveis: 14.999/15.000"
-        const message = `Unidades disponíveis: ${unitsAvailableForConsumption.toLocaleString()}/${totalQuantity.toLocaleString()}`;
-
-        res.json({ message });
+        // Retorna o JSON inteiro com todos os campos
+        res.json(response.data);
     } catch (error) {
         console.error("Erro ao buscar dados da API Roblox:", error.response?.data || error.message);
 
