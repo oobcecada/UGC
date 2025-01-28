@@ -1,4 +1,11 @@
 {
+  "name": "meu-servidor",
+  "version": "1.0.0",
+  "description": "Servidor Express para proxy de API do Roblox",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
   "dependencies": {
     "axios": "^1.7.9",
     "express": "^4.21.2"
